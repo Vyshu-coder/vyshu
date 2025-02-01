@@ -1,0 +1,28 @@
+import random
+user_choice=int(input("Enter your choice: Type 0 for rock,1 for paper,2 for scissors"))
+computer_choice=random.randint(0,2)
+print("Computer choice:")
+if user_choice>=3 or user_choice<0:
+    print("You enter invalid number,you lose")
+else:
+    print(computer_choice)
+    if computer_choice==user_choice:
+        print("Its a draw")
+    elif computer_choice==0 and user_choice==2:
+        print("you lose")
+    elif user_choice==0 and compueter_choice==2:
+        print("you win")
+    elif computer_choice>user_choice:
+        print("you lose")
+    elif user_choice>computer_choice:
+        print("you win")
+    else:
+        print("you lose")
+    another=input("do you want play another game(yes/no)?")
+    if another!='yes':
+        print("thanks for playing")
+        break
+    else:
+        print("here you go")
+    
+
