@@ -1,0 +1,39 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+from prophet import Prophet
+
+# Load dataset
+df = pd.read_csv(r"C:\Users\medhu\Downloads\Plant_1_Generation_Data.csv\Plant_1_Generation_Data.csv")
+
+# Convert DATE_TIME to datetime format
+df['DATE_TIME'] = pd.to_datetime(df['DATE_TIME'], format="%d-%m-%Y %H:%M")
+
+# Group data by time and sum AC power for total solar generation
+df_forecast = df.groupby("DATE_TIME")["AC_POWER"].sum().reset_index()
+
+# Rename columns as required by Prophet
+df_forecast.rename(columns={"DATE_TIME": "ds", "AC_POWER": "y"}, inplace=True)
+
+# Initialize Prophet model
+model = Prophet(yearly_seasonality=True, daily_seasonality=True, changepoint_prior_scale=0.05)
+
+# Fit model to data
+model.fit(df_forecast)
+
+# Create future dates for forecasting (next 7 days)
+future = model.make_future_dataframe(periods=7*24, freq='H')  # 7 days (hourly)
+
+# Predict future values
+forecast = model.predict(future)
+
+# Plot the forecast
+fig = model.plot(forecast)
+plt.title("Solar Power Generation Forecast")
+plt.xlabel("Date")
+plt.ylabel("Predicted Solar Power Output")
+plt.show()
+
+# Display the predicted data
+print(forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].tail(10))
+
+
